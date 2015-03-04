@@ -1,5 +1,5 @@
 // Externals
-var trim_link, $, ga;
+var trim_link, $, ga, history;
 
 (function() {
   'use strict';
@@ -183,6 +183,25 @@ var trim_link, $, ga;
         ga('send', 'event', 'trim upload from details page', 'submit', $('h2').first().text());
       }
     });
+
+
+    // on the PQ details page (/pq/[uin]), make tabs sticky
+
+    $('a[data-toggle=tab]').on('click', function(event) {
+      // when a tab is clicked,
+      var newUrl = event.target.id;
+      // putting tab id in the URL hash,
+      history.pushState({state:newUrl}, "PQ detail", newUrl);
+      // and change the form to submit to a URL with that hash
+      $('.progress-menu-form').attr('action', newUrl);
+    });
+
+    // if this is the details page, take the URL hash and select the corresponding tab
+    if ($('form.progress-menu-form').length) {
+      $('a[href='+window.location.hash+']').tab('show');
+    }
+
+    // should also do the above on hashchange
 
   });
 
