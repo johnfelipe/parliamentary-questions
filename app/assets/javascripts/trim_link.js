@@ -71,7 +71,7 @@ trim_link.setUpTrimFileUpload = function() {
         token = $(this).find('div input[name=authenticity_token]').attr('value'),
         pq_id = $(this).find('div input[name=trim_link\\[pq_id\\]]').attr('value');
 
-      formData.append('photos[]', files[0], files[0].name);
+      formData.append('trim_link[file_data]', files[0], files[0].name);
       formData.append('authenticity_token', token);
       formData.append('utf-8', '✓');
       formData.append('trim_link[pq_id]', pq_id);
