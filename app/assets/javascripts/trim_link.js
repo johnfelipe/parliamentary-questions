@@ -5,7 +5,7 @@
 var trim_link = {};
 
 //function to upload file to trim
-trim_link.trimFileUpload = function() {
+trim_link.setUpTrimFileUpload = function() {
   'use strict';
   $('.trim-links-form').each(function(i, area){
     var container = $(area),
@@ -59,29 +59,47 @@ trim_link.trimFileUpload = function() {
       file_field.click();
     });
 
-    form // trim file upload callbacks
-      .on('ajax:error', function(e, response) {
-        var json = JSON.parse(response.responseText);
 
-        message_icon.attr('class', status_messages.failure.classname);
-        upload_message.text(json.message);
+    container.on('submit', function(event) {
+      event.preventDefault();
 
-        message_container.show();
-      })
-      .on('ajax:success', function(e, response) {
-        var json = JSON.parse(response.responseText);
+      var
+        xhr, json,
+        fileSelect = $(this).find('input.trim-file-chooser'),
+        files = fileSelect.prop('files'),
+        formData = new FormData(),
+        token = $(this).find('div input[name=authenticity_token]').attr('value'),
+        pq_id = $(this).find('div input[name=trim_link\\[pq_id\\]]').attr('value');
 
-        message_icon.attr('class', status_messages.success.classname);
-        upload_message.text(json.message);
+      formData.append('photos[]', files[0], files[0].name);
+      formData.append('authenticity_token', token);
+      formData.append('utf-8', '✓');
+      formData.append('trim_link[pq_id]', pq_id);
 
-        actions
-          .hide()
-          .after('<a href="'+ json.link +'" rel="external">Open trim link</a>');
+      xhr = new XMLHttpRequest();
+      xhr.open('POST', '/trim_links', true);
 
-        message_container.show();
-      });
-
+      xhr.onload = function () {
+        json = JSON.parse(xhr.responseText);
+        if (xhr.status === 200) {
+          json = JSON.parse(xhr.responseText);
+          message_icon.attr('class', status_messages.success.classname);
+          upload_message.text(json.message);
+          actions
+            .hide()
+            .after('<a href="'+ json.link +'" rel="external">Open trim link</a>');
+          message_container.show();
+        } else {
+          message_icon.attr('class', status_messages.failure.classname);
+          upload_message.text(json.message);
+          message_container.show();
+        }
+      };
+      // Send the file
+      xhr.send(formData);
     });
+
+  });
 };
 
 trim_link.toggleCancelLink = function() {
