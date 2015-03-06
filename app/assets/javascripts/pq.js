@@ -190,7 +190,6 @@ $(document).ready(function () {
 
 });
 
-
 $('.form-add-trim-link').on('submit', function(event) {
   event.preventDefault();
 
@@ -223,5 +222,4 @@ $('.form-add-trim-link').on('submit', function(event) {
 
 });
 
-
-}()); // end IFFE
+}());
