@@ -187,9 +187,6 @@ var trim_link, $, ga;
   });
 
 
-});
-
-
 $('.form-add-trim-link').on('submit', function(event) {
   event.preventDefault();
 
@@ -224,4 +221,3 @@ $('.form-add-trim-link').on('submit', function(event) {
 
 
 }()); // end IFFE
-
