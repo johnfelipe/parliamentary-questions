@@ -147,7 +147,7 @@ var trim_link, $, ga;
 
     // set up the trim file upload control on the dashboard
     if ($('.trim_area').length) {
-      trim_link.setUptrimFileUpload();
+      trim_link.setUpTrimFileUpload();
     }
 
     // Form behaviour: checkbox and radio button CSS state changes
@@ -187,37 +187,6 @@ var trim_link, $, ga;
   });
 
 
-$('.form-add-trim-link').on('submit', function(event) {
-  event.preventDefault();
-
-
-  var fileSelect = $(this).find('input.trim-file-chooser');
-  var files = fileSelect.prop('files');
-  var formData = new FormData();
-  var token = $(this).find('div input[name=authenticity_token]').attr('value');
-  var pq_id = $(this).find('div input[name=trim_link\\[pq_id\\]]').attr('value');
-
-  formData.append('photos[]', files[0], files[0].name);
-  formData.append('authenticity_token', token);
-  formData.append('utf-8', '✓');
-  formData.append('trim_link[pq_id]', pq_id);
-
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', '/trim_links', true);
-
-  xhr.onload = function () {
-    if (xhr.status === 200) {
-      // File(s) uploaded.
-      alert('success: '+xhr.responseText);
-    } else {
-      alert('error: '+xhr.responseText());
-    }
-  };
-
-  // Send the Data.
-  xhr.send(formData);
-
-});
 
 
 
